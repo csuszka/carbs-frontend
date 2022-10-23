@@ -23,4 +23,13 @@ code {
     monospace;
 }
 
-.recipe-form{ display: "flex"; width: "500px"; flex-direction: "column" }
+.recipeform { 
+  display: flex; 
+  flex-direction: column;
+  width: 500px; 
+}
+
+.recipe-essentials{
+  display: flex;
+  flex-direction: row;
+}

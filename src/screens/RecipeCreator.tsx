@@ -1,10 +1,10 @@
-import { findByLabelText } from "@testing-library/react";
 import React from "react";
 import { useFieldArray, useForm } from "react-hook-form";
 
 export default function RecipeCreator() {
   type RecipeFormValues = {
     media: string;
+    title: string;
     ingredients: Ingredient[];
     preparation: string;
   };
@@ -15,27 +15,19 @@ export default function RecipeCreator() {
     unitOfMeasurement: string;
   };
 
-  const {
+  const { control, register, handleSubmit, watch, reset, formState } =
+    useForm<RecipeFormValues>({
+      defaultValues: {
+        title: "",
+        media: "",
+        ingredients: [{ name: "", quantity: "", unitOfMeasurement: "g" }],
+        preparation: "",
+      },
+    });
+  const { fields, append, remove } = useFieldArray({
     control,
-    register,
-    handleSubmit,
-    watch,
-    reset,
-    getValues,
-    formState,
-  } = useForm<RecipeFormValues>({
-    defaultValues: {
-      media: "",
-      ingredients: [{ name: "", quantity: "", unitOfMeasurement: "g" }],
-      preparation: "",
-    },
+    name: "ingredients",
   });
-  const { fields, append, prepend, remove, swap, move, insert } = useFieldArray(
-    {
-      control,
-      name: "ingredients", // unique name for your Field Array
-    }
-  );
 
   const onSubmit = (data: RecipeFormValues) => {
     console.log(data);
@@ -44,10 +36,10 @@ export default function RecipeCreator() {
   };
 
   return (
-    // <h1>PIKACHU</h1>
     <>
-      <form onSubmit={handleSubmit(onSubmit)} className="recipe-form">
-        <input {...register("media")} type="text" placeholder="kép URL" />
+      <form onSubmit={handleSubmit(onSubmit)} className="recipeform">
+        <input {...register("media")} type="text" placeholder="Kép URL" />
+        <input {...register("title")} type="text" placeholder="Recept cím" />
         {fields.map((field, index) => (
           <div key={field.id} style={{ display: "flex", flexDirection: "row" }}>
             <input
@@ -96,32 +88,32 @@ export default function RecipeCreator() {
 
       <h1>Előnézet</h1>
       <div>
-        <div
-          style={{
-            height: "200px",
-            width: "300px",
-            backgroundImage: watch("media")
-              ? `url(${watch("media")})`
-              : "url(https://receptguru.cafeblog.hu/files/2017/05/panna-cotta.jpg)",
-            backgroundRepeat: "no-repeat",
-            backgroundSize: "cover",
-          }}
-        ></div>
-        <h2>Hozzávalók</h2>
-        <ul>
-          {/* {fields.map((field) => (
-            <div>
-              {field.name} {field.quantity} {field.unitOfMeasurement}
-            </div>
-          ))} */}
-          {watch("ingredients").map((field) => (
-            <div key={Math.random()}>
-              {field.name} {field.quantity} {field.unitOfMeasurement}
-            </div>
-          ))}
-        </ul>
+        <h1>{watch("title")}</h1>
+        <div className="recipe-essentials">
+          <div
+            style={{
+              height: "200px",
+              width: "300px",
+              backgroundImage: watch("media")
+                ? `url(${watch("media")})`
+                : "url(https://receptguru.cafeblog.hu/files/2017/05/panna-cotta.jpg)",
+              backgroundRepeat: "no-repeat",
+              backgroundSize: "cover",
+            }}
+          />
+          <div>
+            <h2>Hozzávalók</h2>
+            <ul>
+              {watch("ingredients").map((field) => (
+                <div key={Math.random()}>
+                  {field.name} {field.quantity} {field.unitOfMeasurement}
+                </div>
+              ))}
+            </ul>
+          </div>
+        </div>
         <h2>Elkészítés</h2>
-        {watch("preparation")}
+        {watch("preparation").replace("\n", "\r\n")}
       </div>
     </>
   );
