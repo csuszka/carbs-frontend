@@ -37,7 +37,15 @@ export default function RecipeCreator() {
 
   return (
     <>
-      <form onSubmit={handleSubmit(onSubmit)} className="recipeform">
+      <form
+        onSubmit={handleSubmit(onSubmit)}
+        onKeyDown={(event: React.KeyboardEvent) => {
+          if (event.code === "Enter") {
+            event.preventDefault();
+          }
+        }}
+        className="recipeform"
+      >
         <input {...register("media")} type="text" placeholder="Kép URL" />
         <input {...register("title")} type="text" placeholder="Recept cím" />
         {fields.map((field, index) => (

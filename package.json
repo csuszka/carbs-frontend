@@ -18,7 +18,8 @@
     "react-scripts": "5.0.1",
     "typescript": "^4.6.4",
     "web-vitals": "^2.1.4",
-    "xstate": "^4.32.0"
+    "xstate": "^4.32.0",
+    "yup": "^0.32.11"
   },
   "scripts": {
     "start": "react-scripts start",
