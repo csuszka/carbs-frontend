@@ -1,6 +1,7 @@
 import React from "react";
 import { useForm } from "react-hook-form";
 import * as yup from "yup";
+import { yupResolver } from "@hookform/resolvers/yup";
 import {
   ingredients,
   Allergen,
@@ -9,6 +10,7 @@ import {
   Ingredient,
   foodGroups,
   allergens,
+  ShouldCount,
 } from "../resources/ingredients";
 
 export default function IngredientSubmitter() {
@@ -17,7 +19,7 @@ export default function IngredientSubmitter() {
     nameHungarian: string;
     nameEnglish: string;
     carbohydrateContent: string;
-    shouldCount: "yes" | "no" | "no under 200g";
+    shouldCount: ShouldCount;
     absorbedSlowly: boolean;
     foodGroup: FoodGroup;
     allergens: Allergen[];
@@ -31,21 +33,25 @@ export default function IngredientSubmitter() {
     carbohydrateContent: yup.string().required(),
     shouldCount: yup.string().required(),
     absorbedSlowly: yup.boolean().required(),
-    foodGroup: yup.string().required(),
+    foodGroup: yup
+      .object()
+      .shape({ id: yup.number(), nameEnglish: yup.string().required() })
+      .required(),
     allergens: yup.array().min(1),
   });
 
-  const { control, register, handleSubmit, watch, reset, formState } =
+  const { register, handleSubmit, reset, formState } =
     useForm<IngredientFormValues>({
       defaultValues: {
         nameHungarian: "",
         nameEnglish: "",
         carbohydrateContent: "",
-        shouldCount: "yes",
+        shouldCount: 1,
         absorbedSlowly: true,
-        foodGroup: "vegetables",
+        foodGroup: { id: 13, nameEnglish: "vegetables" },
         allergens: [],
       },
+      resolver: yupResolver(schema),
     });
 
   const onSubmit = (data: IngredientFormValues) => {
@@ -56,11 +62,14 @@ export default function IngredientSubmitter() {
       carbohydrateContent: +data.carbohydrateContent,
       shouldCount: data.shouldCount,
       absorbedSlowly: data.absorbedSlowly,
-      foodGroup: data.foodGroup,
+      foodGroup: {
+        id: data.foodGroup.id,
+        nameEnglish: data.foodGroup.nameEnglish,
+      },
       allergens: data.allergens,
     };
     console.log({ data, newIngredient });
-    // addIngredient(newIngredient);
+    addIngredient(newIngredient);
     reset();
   };
 
@@ -154,11 +163,13 @@ export default function IngredientSubmitter() {
               <div>
                 <input
                   type="radio"
-                  id={`food-group-${group}`}
-                  value={group}
+                  id={`food-group-${group.id}`}
+                  value={group.nameEnglish}
                   {...register("foodGroup")}
                 />
-                <label htmlFor={`food-group-${group}`}>{group}</label>
+                <label htmlFor={`food-group-${group.id}`}>
+                  {group.nameEnglish}
+                </label>
               </div>
             );
           })}
@@ -171,11 +182,13 @@ export default function IngredientSubmitter() {
               <div>
                 <input
                   type="checkbox"
-                  id={`allergens-${allergen}`}
-                  value={allergen}
+                  id={`allergens-${allergen.id}`}
+                  value={allergen.nameEnglish}
                   {...register(`allergens`)}
                 />
-                <label htmlFor={`allergens-${allergen}`}>{allergen}</label>
+                <label htmlFor={`allergens-${allergen.id}`}>
+                  {allergen.nameEnglish}
+                </label>
               </div>
             );
           })}
