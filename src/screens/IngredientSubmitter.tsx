@@ -1,4 +1,5 @@
 import React from "react";
+import { useTranslation, Trans } from "react-i18next";
 import { useForm } from "react-hook-form";
 import * as yup from "yup";
 import { yupResolver } from "@hookform/resolvers/yup";
@@ -14,6 +15,8 @@ import {
 } from "../resources/ingredients";
 
 export default function IngredientSubmitter() {
+  const { t } = useTranslation();
+
   type IngredientFormValues = {
     id: string;
     nameHungarian: string;
