@@ -44,5 +44,10 @@
     "vite": "^4.2.1",
     "vite-plugin-svgr": "^2.4.0",
     "vite-tsconfig-paths": "^4.2.0"
+  },
+  "scripts": {
+    "start": "vite",
+    "build": "tsc && vite build",
+    "serve": "vite preview"
   }
 }
