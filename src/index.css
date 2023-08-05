@@ -1,35 +1,38 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
 :root {
-  --main-bg-color: #FAF9FB;
-  --main-text-color: #37456A;
-  --main-theme-color: #FA9200;
+  --main-bg-color: #faf9fb;
+  --main-text-color: #37456a;
+  --main-theme-color: #fa9200;
   --medium-padding: 5px;
   --medium-border-radius: 3px;
   --small-padding: 3px;
   --small-border-radius: 1px;
 }
 
-
 body {
   margin: 0;
-  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen',
-    'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue',
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "Roboto", "Oxygen",
+    "Ubuntu", "Cantarell", "Fira Sans", "Droid Sans", "Helvetica Neue",
     sans-serif;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
 }
 
 code {
-  font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New',
+  font-family: source-code-pro, Menlo, Monaco, Consolas, "Courier New",
     monospace;
 }
 
-.recipeform { 
-  display: flex; 
+.recipeform {
+  display: flex;
   flex-direction: column;
-  width: 500px; 
+  width: 500px;
 }
 
-.recipe-essentials{
+.recipe-essentials {
   display: flex;
   flex-direction: row;
 }

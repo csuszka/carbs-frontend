@@ -1,5 +1,5 @@
 import React from "react";
-import { useTranslation, Trans } from "react-i18next";
+// import { useTranslation, Trans } from "react-i18next";
 import { useForm } from "react-hook-form";
 import * as yup from "yup";
 import { yupResolver } from "@hookform/resolvers/yup";
@@ -15,7 +15,7 @@ import {
 } from "../resources/ingredients";
 
 export default function IngredientSubmitter() {
-  const { t } = useTranslation();
+  // const { t } = useTranslation();
 
   type IngredientFormValues = {
     id: string;
@@ -54,10 +54,12 @@ export default function IngredientSubmitter() {
         foodGroup: { id: 13, nameEnglish: "vegetables" },
         allergens: [],
       },
-      resolver: yupResolver(schema),
+      //resolver: yupResolver(schema),
     });
-
+  console.info("isValid", formState.isValid);
+  console.info("errors", formState.errors);
   const onSubmit = (data: IngredientFormValues) => {
+    console.log("onSubmit");
     const newIngredient: Ingredient = {
       id: lastIngredient.id + 1,
       nameHungarian: data.nameHungarian,
@@ -161,9 +163,10 @@ export default function IngredientSubmitter() {
 
         <div>
           <legend>Csoport</legend>
-          {foodGroups.map((group) => {
+          {foodGroups.map((group, index) => {
+            const key = `food-group-${index}`;
             return (
-              <div>
+              <div key={key}>
                 <input
                   type="radio"
                   id={`food-group-${group.id}`}
@@ -180,9 +183,10 @@ export default function IngredientSubmitter() {
 
         <div>
           <legend>Allergének</legend>
-          {allergens.map((allergen) => {
+          {allergens.map((allergen, index) => {
+            const key = `allergens-${index}`;
             return (
-              <div>
+              <div key={key}>
                 <input
                   type="checkbox"
                   id={`allergens-${allergen.id}`}
@@ -200,7 +204,13 @@ export default function IngredientSubmitter() {
         <button disabled={formState.isSubmitting} type="submit">
           Beküld
         </button>
-        <button disabled={formState.isSubmitting} type="button">
+        <button
+          disabled={formState.isSubmitting}
+          type="button"
+          onClick={() => {
+            reset();
+          }}
+        >
           Mégsem
         </button>
       </form>
